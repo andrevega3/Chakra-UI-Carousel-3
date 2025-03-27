@@ -3,7 +3,8 @@
   "compilerOptions": {
     "declaration": true,
     "jsx": "react",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "outDir": "dist",
     "strict": true
   },

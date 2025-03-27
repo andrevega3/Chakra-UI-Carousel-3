@@ -1,5 +1,5 @@
-import { useMediaQuery, useTheme } from "@chakra-ui/react";
-import React, { useContext, useEffect } from "react";
+import { useBreakpointValue } from "@chakra-ui/react";
+import React, { useContext, useEffect, useMemo } from "react";
 import Item from "../Item";
 import { Context, ContextType } from "../Provider";
 import Slider from "../Slider";
@@ -10,8 +10,15 @@ export interface CarouselPropTypes {
   gap: number;
 }
 
-export const Carousel: React.FC<CarouselPropTypes> = ({ children, gap }) => {
+export const Carousel: React.FC<CarouselPropTypes> = ({
+  children,
+  gap,
+}) => {
   const context = useContext(Context);
+  if (!context) {
+    console.error("❌ Carousel must be wrapped in <Provider>");
+    return null;
+  }
 
   const {
     setItemWidth,
@@ -20,59 +27,57 @@ export const Carousel: React.FC<CarouselPropTypes> = ({ children, gap }) => {
     setConstraint,
     itemWidth,
     setPositions,
-  } = context as ContextType;
+    multiplier,
+    constraint,
+    positions,
+    infinite,
+    autoplay,
+  } = context;
 
-  const { breakpoints } = useTheme();
+  const layout = useBreakpointValue({
+    base: { multiplier: 0.65, constraint: 1, divisor: 1 },
+    md: { multiplier: 0.5, constraint: 2, divisor: 2 },
+    xl: { multiplier: 0.35, constraint: 3, divisor: 3 },
+  });
+
+  const mapChildren = useMemo(() => {
+    if (!infinite || constraint === 0) return children;
+
+    const result = [
+      ...children.slice(-constraint),       // prepended clones
+      ...children,
+      ...children.slice(0, constraint + 1)  // extended clones after end
+    ];
+
+    console.log("🧮 Rendering indexes:", result.map((_, i) => i));
+    return result;
+  }, [children, infinite, constraint]);
 
   useEffect(() => {
-    const newPositions = children?.map(
+    if (!layout) return;
+
+    const newItemWidth = sliderWidth / layout.divisor - gap;
+
+    setItemWidth(newItemWidth);
+    setMultiplier(layout.multiplier);
+    setConstraint(layout.constraint);
+  }, [layout, sliderWidth, gap]);
+
+  useEffect(() => {
+    const newPositions = mapChildren.map(
       (_, index) => -Math.abs((itemWidth + gap) * index)
     );
 
-    setPositions(newPositions);
-  }, [children, gap, itemWidth, setPositions]);
-
-  const [isBetweenBaseAndMd] = useMediaQuery(
-    `(min-width: ${breakpoints?.base}) and (max-width: ${breakpoints?.md})`
-  );
-
-  const [isBetweenMdAndXl] = useMediaQuery(
-    `(min-width: ${breakpoints?.md}) and (max-width: ${breakpoints?.xl})`
-  );
-
-  const [isGreaterThanXL] = useMediaQuery(`(min-width: ${breakpoints?.xl})`);
-
-  useEffect(() => {
-    if (isBetweenBaseAndMd) {
-      setItemWidth(sliderWidth - gap);
-      setMultiplier(0.65);
-      setConstraint(1);
+    if (JSON.stringify(newPositions) !== JSON.stringify(positions)) {
+      setPositions(newPositions);
+      console.log("📍 Updated Positions:", newPositions);
     }
-    if (isBetweenMdAndXl) {
-      setItemWidth(sliderWidth / 2 - gap);
-      setMultiplier(0.5);
-      setConstraint(2);
-    }
-    if (isGreaterThanXL) {
-      setItemWidth(sliderWidth / 3 - gap);
-      setMultiplier(0.35);
-      setConstraint(3);
-    }
-  }, [
-    isBetweenBaseAndMd,
-    isBetweenMdAndXl,
-    isGreaterThanXL,
-    sliderWidth,
-    gap,
-    setItemWidth,
-    setMultiplier,
-    setConstraint,
-  ]);
+  }, [mapChildren, gap, itemWidth, positions, setPositions]);
 
   return (
     <Slider gap={gap}>
       <Track>
-        {children.map((child, index) => (
+        {mapChildren.map((child, index) => (
           <Item gap={gap} key={index} index={index}>
             {child}
           </Item>

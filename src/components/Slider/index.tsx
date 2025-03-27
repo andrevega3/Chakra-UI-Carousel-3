@@ -16,10 +16,10 @@ const Slider: React.FC<SliderPropsType> = ({ children, gap }) => {
 
   const [myRef, boundingClientRect] = useBoundingclientrectRef();
 
-  useLayoutEffect(
-    () => initSliderWidth(Math.round(boundingClientRect?.width ?? 0)),
-    [boundingClientRect?.width, initSliderWidth]
-  );
+  useLayoutEffect(() => {
+    console.log("📏 boundingClientRect.width:", boundingClientRect?.width);
+    initSliderWidth(Math.round(boundingClientRect?.width ?? 0));
+  }, [boundingClientRect?.width, initSliderWidth]);
 
 
   return (
@@ -31,6 +31,7 @@ const Slider: React.FC<SliderPropsType> = ({ children, gap }) => {
         px={`${gap / 2}px`}
         position="relative"
         overflow="hidden"
+        bg="red"
         _before={{
           bgGradient: "linear(to-r, base.d400, transparent)",
           position: "absolute",

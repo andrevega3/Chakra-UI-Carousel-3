@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex, VStack, chakra } from "@chakra-ui/react";
 import { motion, useAnimation, useMotionValue } from "framer-motion";
 import React, {
   useCallback,
@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { Context, ContextType } from "../Provider";
 
-const MotionFlex = motion(Flex);
+const MotionFlex = motion(chakra(Flex));
 
 interface TrackPropsType {
   children: React.ReactNode;
@@ -29,6 +29,7 @@ const Track: React.FC<TrackPropsType> = ({ children }) => {
     multiplier,
     itemWidth,
     positions,
+    infinite,
   } = context as ContextType;
 
   const [dragStartPosition, setDragStartPosition] = useState(0);
@@ -50,7 +51,6 @@ const Track: React.FC<TrackPropsType> = ({ children }) => {
   const handleDragStart = () => setDragStartPosition(positions[activeItem]);
 
   const handleDragEnd = (_: any, info: any) => {
-    console.log(info);
     const distance = info.offset.x;
     const velocity = info.velocity.x * multiplier;
     const direction = velocity < 0 || distance < 0 ? 1 : -1;
@@ -90,18 +90,21 @@ const Track: React.FC<TrackPropsType> = ({ children }) => {
   };
 
   const handleResize = useCallback(
-    () =>
+    () => {
+      console.log("📦 handleResize → activeItem:", activeItem);
+      console.log("📦 handleResize → target position:", positions[activeItem]);
       controls.start({
         x: positions[activeItem],
         transition: {
           ...transitionProps,
         },
-      }),
+      });
+    },
     [activeItem, controls, positions, transitionProps]
   );
 
   const handleClick = useCallback(
-    (event) =>
+    (event: { target: any; }) =>
       // @ts-expect-error
       node?.current?.contains(event.target)
         ? setTrackIsActive(true)
@@ -110,24 +113,18 @@ const Track: React.FC<TrackPropsType> = ({ children }) => {
   );
 
   const handleKeyDown = useCallback(
-    (event) => {
+    (event: { key: string; preventDefault: () => void; }) => {
       if (trackIsActive) {
         if (activeItem < positions.length - constraint) {
           if (event.key === "ArrowRight" || event.key === "ArrowUp") {
             event.preventDefault();
-            // @ts-expect-error
-            setActiveItem((prev: number) => {
-              return prev + 1;
-            });
+            setActiveItem(activeItem + 1);
           }
         }
-        if (activeItem > positions.length - positions.length) {
+        if (activeItem > 0) {
           if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
             event.preventDefault();
-            // @ts-expect-error
-            setActiveItem((prev: number) => {
-              return prev - 1;
-            });
+            setActiveItem(activeItem - 1);
           }
         }
       }
@@ -152,7 +149,7 @@ const Track: React.FC<TrackPropsType> = ({ children }) => {
   return (
     <>
       {itemWidth && (
-        <VStack overflowX='hidden' ref={node} spacing={5} alignItems="stretch">
+        <VStack overflowX='hidden' ref={node} gap={5} alignItems="stretch">
           <MotionFlex
             dragConstraints={node}
             onDragStart={handleDragStart}

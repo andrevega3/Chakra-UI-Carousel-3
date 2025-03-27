@@ -1,17 +1,18 @@
 import React from "react";
 import { Carousel } from ".";
-import renderer from "react-test-renderer";
+import { render } from "@testing-library/react";
 import { DemoComp } from "./Carousel.stories";
 import { Provider } from "../Provider";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react"
 import { LeftButton } from "../LeftButton";
 import { RightButton } from "../RightButton";
 
+
+
 describe("renders correctly", () => {
   it("Carousel renders correctly", () => {
-    const container = renderer
-      .create(
-        <ChakraProvider>
+    const { asFragment } = render(
+        <ChakraProvider value={defaultSystem}>
           <Provider>
             <Carousel gap={3}>
               <DemoComp index={1} />
@@ -21,15 +22,14 @@ describe("renders correctly", () => {
             </Carousel>
           </Provider>
         </ChakraProvider>
-      )
-      .toJSON();
-    expect(container).toMatchSnapshot();
+      );
+      expect(asFragment()).toMatchSnapshot();
   });
 });
 
 describe("active item changes successfully", () => {
   xit('active index increases by 1 when "next" button is clicked', () => {
-    const container = renderer.create(
+    const { asFragment } = render(
       <Provider>
         <Carousel gap={50}>
           <DemoComp index={1} />
@@ -46,7 +46,7 @@ describe("active item changes successfully", () => {
         <LeftButton />
         <RightButton />
       </Provider>
-    ).toJSON();
-    expect(container).toMatchSnapshot();
+    )
+    expect(asFragment()).toMatchSnapshot();
   });
 });

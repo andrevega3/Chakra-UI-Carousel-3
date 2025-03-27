@@ -1,6 +1,6 @@
-import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { Flex, Heading, HStack, Text } from "@chakra-ui/react";
-import { Story } from "@storybook/react";
+import { StoryFn } from "@storybook/react";
 import React from "react";
 import { Carousel } from ".";
 import { LeftButton } from "../LeftButton";
@@ -41,7 +41,7 @@ export const DemoComp = ({ index }: { index: number }) => {
   );
 };
 
-export const Primary: Story = () => (
+export const Primary: StoryFn = () => (
   <Provider>
     <Carousel gap={50}>
       <DemoComp index={1} />
@@ -62,14 +62,14 @@ export const Primary: Story = () => (
       gap="48"
       alignItems="center"
     >
-      <LeftButton bgColor='red.500' textColor={'whatsapp.500'} />
-      <RightButton bgColor='blue.500' />
+      <LeftButton bg='red.500' color={'whatsapp.500'} />
+      <RightButton bg='blue.500' />
     </HStack>
   </Provider>
 );
 
 
-export const CustomButtons: Story = () => (
+export const CustomButtons: StoryFn = () => (
   <Provider>
     <Carousel gap={50}>
       <DemoComp index={1} />
@@ -83,7 +83,27 @@ export const CustomButtons: Story = () => (
       gap="48"
       alignItems="center"
     >
-      <LeftButton bgColor='red.500' customIcon={<ArrowLeftIcon />} textColor={'whatsapp.500'} />
+      <LeftButton bgColor='red.500' customIcon={<ArrowLeftIcon />} color={'whatsapp.500'} />
+      <RightButton bgColor='blue.500' customIcon={<ArrowRightIcon />}  />
+    </HStack>
+    </Provider>
+)
+
+export const Infinite: StoryFn = () => (
+  <Provider infinite>
+    <Carousel gap={50}>
+      <DemoComp index={1} />
+      <DemoComp index={2} />
+      <DemoComp index={3} />
+    </Carousel>
+    <HStack
+      display="flex"
+      marginTop="10"
+      justifyContent="space-between"
+      gap="48"
+      alignItems="center"
+    >
+      <LeftButton bgColor='red.500' customIcon={<ArrowLeftIcon />} color={'whatsapp.500'} />
       <RightButton bgColor='blue.500' customIcon={<ArrowRightIcon />}  />
     </HStack>
     </Provider>

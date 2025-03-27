@@ -1,12 +1,132 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly Carousel renders correctly 1`] = `
-Array [
+<DocumentFragment>
   <div
-    className="css-seh9k4"
+    class="css-10uq0s4"
   >
-    0
-  </div>,
-  <span />,
-]
+    <div
+      class="chakra-stack css-7qd5oz"
+    >
+      <div
+        class="css-1kuahdq"
+        draggable="false"
+        style="transform: none; user-select: none;"
+      >
+        <div
+          class="css-6vcq0v"
+        >
+          <div
+            class="css-gi6qt2"
+            id="carousel-item-1"
+          >
+            <h2
+              class="chakra-heading css-4z9z2s"
+            >
+              Title 1
+            </h2>
+            <div
+              class="css-gg4vpm"
+            >
+              <p
+                class="css-bjcoli"
+              >
+                Body 1
+              </p>
+              <p
+                class="css-a2wsy3"
+              >
+                user 1
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="css-6vcq0v"
+        >
+          <div
+            class="css-gi6qt2"
+            id="carousel-item-2"
+          >
+            <h2
+              class="chakra-heading css-4z9z2s"
+            >
+              Title 2
+            </h2>
+            <div
+              class="css-gg4vpm"
+            >
+              <p
+                class="css-bjcoli"
+              >
+                Body 2
+              </p>
+              <p
+                class="css-a2wsy3"
+              >
+                user 2
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="css-6vcq0v"
+        >
+          <div
+            class="css-gi6qt2"
+            id="carousel-item-3"
+          >
+            <h2
+              class="chakra-heading css-4z9z2s"
+            >
+              Title 3
+            </h2>
+            <div
+              class="css-gg4vpm"
+            >
+              <p
+                class="css-bjcoli"
+              >
+                Body 3
+              </p>
+              <p
+                class="css-a2wsy3"
+              >
+                user 3
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="css-6vcq0v"
+        >
+          <div
+            class="css-gi6qt2"
+            id="carousel-item-4"
+          >
+            <h2
+              class="chakra-heading css-4z9z2s"
+            >
+              Title 4
+            </h2>
+            <div
+              class="css-gg4vpm"
+            >
+              <p
+                class="css-bjcoli"
+              >
+                Body 4
+              </p>
+              <p
+                class="css-a2wsy3"
+              >
+                user 4
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
 `;

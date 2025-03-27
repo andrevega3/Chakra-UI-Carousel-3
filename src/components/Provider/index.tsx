@@ -15,15 +15,23 @@ export interface ContextType {
   setItemWidth: (value: number) => void;
   positions: number[];
   setPositions: (value: number[]) => void;
+  infinite: boolean;
+  autoplay: boolean;
 }
 
 export const Context = createContext<ContextType | undefined>(undefined);
 
 interface ProviderProps {
   children: React.ReactNode;
+  infinite?: boolean;
+  autoplay?: boolean;
 }
 
-export const Provider: React.FC<ProviderProps> = ({ children }) => {
+export const Provider: React.FC<ProviderProps> = ({ 
+  children,
+  infinite = false,
+  autoplay = false,
+ }) => {
   const [trackIsActive, setTrackIsActive] = useState(false);
   const [multiplier, setMultiplier] = useState(0.35);
   const [sliderWidth, setSliderWidth] = useState(0);
@@ -52,7 +60,9 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
       setItemWidth,
       setConstraint,
       positions,
-      setPositions
+      setPositions,
+      infinite,
+      autoplay,
     }),
     [
       trackIsActive,
@@ -68,7 +78,9 @@ export const Provider: React.FC<ProviderProps> = ({ children }) => {
       setItemWidth,
       setConstraint,
       positions,
-      setPositions
+      setPositions,
+      infinite,
+      autoplay,
     ]
   );
 
